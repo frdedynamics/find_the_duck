@@ -1,0 +1,3 @@
+---
+layout: input_page
+---
