@@ -22,14 +22,15 @@
     <div class="container">
       <form id="user-form">
     <div class="input-container">
+      <input type="text" id="user-text0" placeholder="Duck number">
       <input type="text" id="user-text1" placeholder="Enter your name">
-      <input type="text" id="user-text2" placeholder="Enter another name">
+      <input type="text" id="user-text2" placeholder="Date">
     </div>
     <button type="submit">Submit</button>
   </form>
     
       <div id="user-input">
-        <h2>Entered Names:</h2>
+        <h2>Found Ducks:</h2>
         <ul id="name-list"></ul>
       </div>
     </div>
@@ -37,22 +38,24 @@
     <script>
       // JavaScript code for handling user input and rendering it on the page
   const form = document.getElementById('user-form');
+  const userInput1 = document.getElementById('user-text0');
   const userInput1 = document.getElementById('user-text1');
   const userInput2 = document.getElementById('user-text2');
   const nameList = document.getElementById('name-list');
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
+    const inputValue0 = userInput0.value;
     const inputValue1 = userInput1.value;
     const inputValue2 = userInput2.value;
     userInput1.value = '';
     userInput2.value = '';
-    appendToNameList(inputValue1, inputValue2);
+    appendToNameList(inputValue0, inputValue1, inputValue2);
   });
 
-  function appendToNameList(name1, name2) {
+  function appendToNameList(name0, name1, name2) {
     const newListItem = document.createElement('li');
-    newListItem.textContent = name1 + ' and ' + name2;
+    newListItem.textContent = ' Duck- ' + name0 + ' is found by ' + name1 + ' on ' + name2;
     nameList.appendChild(newListItem);
   }
     </script>
