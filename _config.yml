@@ -15,6 +15,7 @@ header:
       slug: /
     - name: Blog
     - name: Test
+      slug: /user
 
 footer:
   show_powered_by: true
