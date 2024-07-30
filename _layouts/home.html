@@ -51,7 +51,12 @@ form.addEventListener('submit', function(e) {
   userInput1.value = '';
   userInput2.value = '';
   userInput3.value = '';
-  appendToNameList(inputValue1, inputValue2, inputValue3);
+
+  const now = new Date();
+  const currentDateAndTime = now.toString();
+
+  
+  appendToNameList(inputValue1, inputValue2, currentDateAndTime);
   saveToDatabase(inputValue1, inputValue2, inputValue3);
 });
 
