@@ -10,26 +10,33 @@ og_image: /assets/img/content/post-example/Banner.jpg
 <br />
 <br />
 
-const handleComment = (e)=>{
-  e.preventDefault();
-  const newDiv = document.createElement("div");
-  
-  newDiv.innerText = e.target.comments.value;
-  const comments = document.getElementById("comments")
-  comments.append(newDiv)
-}
 
-const form = document.getElementById("commentForm")
-form.addEventListener("submit", handleComment, true);
-<div id="comments"></div>
-<div class="commentform">
-             <h1>Leave your comment!</h1>
-             <br>
-             <br>
-             <form id="commentForm" class="commentform" >
-                 <p>Nickname or Name</p> <input id="name" required="required" type="text">
-                 <br>
-                 <p>Comments: </p><textarea id="comment" name="comments" rows="8" cols="20"></textarea>
-                 <button type="submit" name="commentsubmit">Comment!</button>
-            </form>
+<div class="container">
+  <h1>User Input Page</h1>
+  <div id="user-input"></div>
+
+  <form id="user-form">
+    <input type="text" id="user-text" placeholder="Enter text">
+    <button type="submit">Submit</button>
+  </form>
 </div>
+
+<script>
+  // JavaScript code for handling user input and rendering it on the page
+  const form = document.getElementById('user-form');
+  const userInput = document.getElementById('user-text');
+  const userInputDiv = document.getElementById('user-input');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const inputValue = userInput.value;
+    userInput.value = '';
+    appendToUserInput(inputValue);
+  });
+
+  function appendToUserInput(text) {
+    const newParagraph = document.createElement('p');
+    newParagraph.textContent = text;
+    userInputDiv.appendChild(newParagraph);
+  }
+</script>
