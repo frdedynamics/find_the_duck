@@ -1,4 +1,4 @@
 ---
 layout: input_page
-slug: \user
+slug: /user
 ---
