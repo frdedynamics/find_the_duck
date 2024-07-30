@@ -52,12 +52,45 @@ form.addEventListener('submit', function(e) {
   userInput2.value = '';
   userInput3.value = '';
   appendToNameList(inputValue1, inputValue2, inputValue3);
+  saveToDatabase(inputValue1, inputValue2, inputValue3);
 });
 
 function appendToNameList(name1, name2, name3) {
   const newListItem = document.createElement('li');
   newListItem.textContent = 'Duck- ' + name1 + ' is found by ' + name2 + ' on  ' + name3;
   nameList.appendChild(newListItem);
+}
+
+function saveToDatabase(name1, name2, name3) {
+  fs.readFile('./database/names.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    const names = JSON.parse(data);
+    names.push({ name1, name2, name3 });
+
+    fs.writeFile('./database/names.json', JSON.stringify(names), 'utf8', (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  });
+}
+
+function loadFromDatabase() {
+  fs.readFile('./database/names.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    const names = JSON.parse(data);
+    names.forEach(({ name1, name2, name3 }) => {
+      appendToNameList(name1, name2, name3);
+    });
+  });
 }
 </script>
 
