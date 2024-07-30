@@ -19,44 +19,41 @@
       </div>
     </div>
 
+    <div class="container">
+      <form id="user-form">
+        <input type="text" id="user-text" placeholder="Enter your name">
+        <button type="submit">Submit</button>
+      </form>
+    
+      <div id="user-input">
+        <h2>Entered Names:</h2>
+        <ul id="name-list"></ul>
+      </div>
+    </div>
+    
+    <script>
+      // JavaScript code for handling user input and rendering it on the page
+      const form = document.getElementById('user-form');
+      const userInput = document.getElementById('user-text');
+      const nameList = document.getElementById('name-list');
+    
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const inputValue = userInput.value;
+        userInput.value = '';
+        appendToNameList(inputValue);
+      });
+    
+      function appendToNameList(name) {
+        const newListItem = document.createElement('li');
+        newListItem.textContent = name;
+        nameList.appendChild(newListItem);
+      }
+    </script>
+
     {% include footer.html %}
 
     {% include foot.html %}
   </body>
-
-  <div class="container">
-  <h1>Home Page</h1>
-  <p>🐤 A social game. Have you found the duck? Write your name and hide it again for the next person!</p>
-
-  <form id="user-form">
-    <input type="text" id="user-text" placeholder="Enter your name">
-    <button type="submit">Submit</button>
-  </form>
-
-  <div id="user-input">
-    <h2>Entered Names:</h2>
-    <ul id="name-list"></ul>
-  </div>
-</div>
-
-<script>
-  // JavaScript code for handling user input and rendering it on the page
-  const form = document.getElementById('user-form');
-  const userInput = document.getElementById('user-text');
-  const nameList = document.getElementById('name-list');
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const inputValue = userInput.value;
-    userInput.value = '';
-    appendToNameList(inputValue);
-  });
-
-  function appendToNameList(name) {
-    const newListItem = document.createElement('li');
-    newListItem.textContent = name;
-    nameList.appendChild(newListItem);
-  }
-</script>
   
 </html>
