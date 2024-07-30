@@ -1,7 +1,7 @@
 ---
 layout: work
-title: Us
-slug: /us
+title: Work
+slug: /work
 items:
   - title: Who are we?
     image:
