@@ -12,7 +12,7 @@ items:
     image:
       src: /assets/img/work/sand.png
       alt: sand
-    description: to have funç
+    description: to have fun.
 ---
 
 As HVL Robotics, we see the world as a fun place if there is enough nerdy-ness every day.
