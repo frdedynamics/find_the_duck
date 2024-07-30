@@ -26,22 +26,18 @@ footer:
       value: YourWeChatUsername
       link: "#"
   follow:
-    - type: twitter
-      name: Twitter
-      link: http://twitter.com/YourTwitterUsername
-      username: "@YourTwitterUsername"
-    - type: facebook
-      name: Facebook
-      link: http://facebook.com/YourFacebookUsername
+    - type: instagram
+      name: Instagram
+      link: https://www.instagram.com/hvlrobotics/
+    - type: youtube
+      name: Youtube
+      link: https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg
     - type: linkedin
       name: LinkedIn
-      link: http://linkedin.com/in/YourLinkedInUsername
+      link: https://www.linkedin.com/company/81467872/admin/dashboard/
     - type: github
       name: GitHub
-      link: http://github.com/YourGitHubUsername
-    - type: dribbble
-      name: Dribbble
-      link: https://dribbble.com/YourDribbbleUsername
+      link: https://github.com/frdedynamics
     - type: rss
       name: RSS
       link: /feed.xml
