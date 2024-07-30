@@ -21,10 +21,7 @@ footer:
   contact:
     - type: email
       name: Email
-      value: yourmail@domain.com
-    - type: wechat
-      value: YourWeChatUsername
-      link: "#"
+      value: gizem.ates@hvl.no
   follow:
     - type: instagram
       name: Instagram
