@@ -52,10 +52,20 @@ form.addEventListener('submit', function(e) {
   userInput2.value = '';
   userInput3.value = '';
 
-  const now = new Date();
-  const currentDateAndTime = now.toString();
+  //const now = new Date();
+  //const currentDateAndTime = now.toString();
 
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Month index starts from 0, pad with 0 if single digit
+  const day = String(now.getDate()).padStart(2, '0'); // Pad with 0 if single digit
+  const hours = String(now.getHours()).padStart(2, '0'); // Pad with 0 if single digit
+  const minutes = String(now.getMinutes()).padStart(2, '0'); // Pad with 0 if single digit
+  const seconds = String(now.getSeconds()).padStart(2, '0'); // Pad with 0 if single digit
+  const milliseconds = String(now.getMilliseconds()).padStart(3, '0'); // Pad with zeros if necessary
   
+  const currentDateAndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+
   appendToNameList(inputValue1, inputValue2, currentDateAndTime);
   saveToDatabase(inputValue1, inputValue2, inputValue3);
 });
