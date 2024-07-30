@@ -1,5 +1,5 @@
 ---
-layout: us
+layout: work
 title: Us
 slug: /us
 items:
