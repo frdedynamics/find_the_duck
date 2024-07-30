@@ -21,9 +21,12 @@
 
     <div class="container">
       <form id="user-form">
-        <input type="text" id="user-text" placeholder="Enter your name">
-        <button type="submit">Submit</button>
-      </form>
+    <div class="input-container">
+      <input type="text" id="user-text1" placeholder="Enter your name">
+      <input type="text" id="user-text2" placeholder="Enter another name">
+    </div>
+    <button type="submit">Submit</button>
+  </form>
     
       <div id="user-input">
         <h2>Entered Names:</h2>
@@ -33,23 +36,48 @@
     
     <script>
       // JavaScript code for handling user input and rendering it on the page
-      const form = document.getElementById('user-form');
-      const userInput = document.getElementById('user-text');
-      const nameList = document.getElementById('name-list');
-    
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const inputValue = userInput.value;
-        userInput.value = '';
-        appendToNameList(inputValue);
-      });
-    
-      function appendToNameList(name) {
-        const newListItem = document.createElement('li');
-        newListItem.textContent = name;
-        nameList.appendChild(newListItem);
-      }
+  const form = document.getElementById('user-form');
+  const userInput1 = document.getElementById('user-text1');
+  const userInput2 = document.getElementById('user-text2');
+  const nameList = document.getElementById('name-list');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const inputValue1 = userInput1.value;
+    const inputValue2 = userInput2.value;
+    userInput1.value = '';
+    userInput2.value = '';
+    appendToNameList(inputValue1, inputValue2);
+  });
+
+  function appendToNameList(name1, name2) {
+    const newListItem = document.createElement('li');
+    newListItem.textContent = name1 + ' and ' + name2;
+    nameList.appendChild(newListItem);
+  }
     </script>
+
+    <style>
+  /* CSS styles for positioning and styling the form elements */
+  .container {
+    text-align: center;
+  }
+
+  .input-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .input-container input {
+    margin-right: 10px;
+    padding: 5px;
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 5px 10px;
+  }
+</style>
 
     {% include footer.html %}
 
