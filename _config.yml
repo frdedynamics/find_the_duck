@@ -8,8 +8,6 @@ google_analytics: "UA-121636368-3"
 
 plugins:
   - jekyll-feed
-  - jekyll-environment-variables
-  - jekyll-dotenv
 
 header:
   pages:
@@ -24,12 +22,12 @@ footer:
       name: Email
       value: gizem.ates@hvl.no
   follow:
-    # - type: instagram
-    #   name: Instagram
-    #   link: https://www.instagram.com/hvlrobotics/
-    # - type: youtube
-    #   name: Youtube
-    #   link: https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg
+    - type: instagram
+      name: Instagram
+      link: https://www.instagram.com/hvlrobotics/
+    - type: youtube
+      name: Youtube
+      link: https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg
     - type: linkedin
       name: LinkedIn
       link: https://www.linkedin.com/company/81467872/admin/dashboard/
@@ -39,6 +37,15 @@ footer:
     - type: rss
       name: RSS
       link: /feed.xml
+
+<%
+  # Load environment variables from GitHub Secrets if available
+  ENV['SUPABASE_URL'] ||= 'default_supabase_url' # Provide a default if not set
+  ENV['SUPABASE_KEY'] ||= 'default_supabase_key' # Provide a default if not set
+%>
+
+supabase_url: "<%= ENV['SUPABASE_URL'] %>"
+supabase_key: "<%= ENV['SUPABASE_KEY'] %>"
 
 # Build settings
 markdown: kramdown
