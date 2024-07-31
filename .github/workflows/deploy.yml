@@ -25,11 +25,11 @@ jobs:
         bundle install
 
     - name: Build site
-      with:
-        JEKYLL_ENV: github-pages
+      env:
+        JEKYLL_ENV: production
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: bundle exec jekyll build --config _config.yml
+      run: bundle exec jekyll build --config _config.yml
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
