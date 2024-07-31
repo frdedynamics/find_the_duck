@@ -1,26 +1,30 @@
-name: Build and Deploy Jekyll Site
+name: Deploy Jekyll site to GitHub Pages
 
 on:
   push:
     branches:
-      - master
+      - master  # Change this to your default branch
+  workflow_dispatch:  # Add this line to allow manual triggers
 
 jobs:
-  build:
+  github-pages:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6'
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'  # Change to your required Ruby version
 
-      - name: Install dependencies
-        run: bundle install
+    - name: Install dependencies
+      run: |
+        gem install bundler -v 2.4.22
+        bundle install
 
-      - name: Build Jekyll site
+    - name: Build Jekyll site
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
@@ -29,8 +33,9 @@ jobs:
           echo "supabase_anon_key: $SUPABASE_KEY" >> _config.yml
           JEKYLL_ENV=production bundle exec jekyll build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
+å
