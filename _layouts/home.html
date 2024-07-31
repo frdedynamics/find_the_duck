@@ -115,8 +115,8 @@
   <script>
     // Supabase configuration
     const { createClient } = supabase;
-    const supabaseUrl = "{{ secrets.SUPABASE_URL }}";
-    const supabaseKey = "{{ secrets.SUPABASE_KEY}}";
+    const supabaseUrl = "{{ site.env.SUPABASE_URL }}";
+    const supabaseKey = "{{ site.env.SUPABASE_KEY}}";
     const _supabase = createClient(supabaseUrl, supabaseKey);
 
 
