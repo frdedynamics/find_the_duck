@@ -1,14 +1,15 @@
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-
 title: Find The Duck
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Bay is a minimal Jekyll Theme.
-baseurl: "/find_the_duck" # the subpath of the site
-url: "https://frdedynamics.github.io" # the base hostname & protocol for the site
+baseurl: "/find_the_duck"
+url: "https://frdedynamics.github.io"
 og_image: /assets/img/profile-pic.jpg
 google_analytics: "UA-121636368-3"
 
+plugins:
+  - jekyll-feed
+  - jekyll-environment-variables
+  - jekyll-dotenv
 
 header:
   pages:
@@ -23,12 +24,12 @@ footer:
       name: Email
       value: gizem.ates@hvl.no
   follow:
-    - type: instagram
-      name: Instagram
-      link: https://www.instagram.com/hvlrobotics/
-    - type: youtube
-      name: Youtube
-      link: https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg
+    # - type: instagram
+    #   name: Instagram
+    #   link: https://www.instagram.com/hvlrobotics/
+    # - type: youtube
+    #   name: Youtube
+    #   link: https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg
     - type: linkedin
       name: LinkedIn
       link: https://www.linkedin.com/company/81467872/admin/dashboard/
@@ -43,9 +44,6 @@ footer:
 markdown: kramdown
 sass:
     style: :compressed
-plugins:
-  - jekyll-feed
-
 
 # Excluded items
 exclude:

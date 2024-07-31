@@ -115,9 +115,10 @@
   <script>
     // Supabase configuration
     const { createClient } = supabase;
-    const supabaseUrl = "{{ site.supabase_url }}";
-    const supabaseKey = "{{ site.supabase_key }}";
+    const supabaseUrl = "{{ site.env.SUPABASE_URL }}";
+    const supabaseKey = "{{ site.env.SUPABASE_KEY}}";
     const _supabase = createClient(supabaseUrl, supabaseKey);
+
 
     const form = document.getElementById('user-form');
     const userInput1 = document.getElementById('user-text1');
