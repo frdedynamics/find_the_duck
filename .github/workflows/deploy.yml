@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main  # Change this to your default branch
+  workflow_dispatch:  # Add this line to allow manual triggers
 
 jobs:
   build:
@@ -20,7 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        gem install bundler
+        gem install bundler -v 2.4.22
         bundle install
 
     - name: Build site
