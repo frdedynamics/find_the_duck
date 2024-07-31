@@ -2,7 +2,7 @@ title: Find The Duck
 description: >-
   Bay is a minimal Jekyll Theme.
 baseurl: "/find_the_duck"
-url: "http://localhost:4000"
+url: "https://frdedynamics.github.io"
 og_image: /assets/img/profile-pic.jpg
 google_analytics: "UA-121636368-3"
 
