@@ -28,7 +28,7 @@ jobs:
         JEKYLL_ENV: production
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      run: bundle exec jekyll build
+      run: bundle exec jekyll build --config _config.yml
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
