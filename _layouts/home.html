@@ -1,140 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
   {% include head.html %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      background-color: #f7fafc;
+      color: #2d3748;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .page-content {
+      flex: 1;
+      padding: 20px;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .home {
+      text-align: center;
+    }
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 10%;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background-color: #4299e1;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #3182ce;
+    }
+    #user-input {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 600px;
+    }
+    #name-list {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  {% include header.html %}
+  
+  <div class="page-content">
+    <div class="wrapper">
+      <div class="home">
+        <img
+          src="{{ page.profile_picture.src | absolute_url }}"
+          alt="{{ page.profile_picture.alt }}"
+          class="profile-pic"
+        />
+        {{ content }}
+      </div>
 
-  <body>
-    {% include header.html %}
+      <div class="container">
+        <form id="user-form">
+          <div class="input-container">
+            <input type="text" id="user-text1" placeholder="Duck no">
+            <input type="text" id="user-text2" placeholder="Enter your name">
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
 
-    <div class="page-content">
-      <div class="wrapper">
-        <div class="home">
-          <img
-            src="{{ page.profile_picture.src | absolute_url }}"
-            alt="{{ page.profile_picture.alt }}"
-            class="profile-pic"
-          />
-
-          {{ content }}
-        </div>
+      <div id="user-input">
+        <h2>Found Ducks:</h2>
+        <ul id="name-list"></ul>
       </div>
     </div>
-
-    <div class="container">
-
-  <form id="user-form">
-    <div class="input-container">
-      <input type="text" id="user-text1" placeholder="Duck no">
-      <input type="text" id="user-text2" placeholder="Enter your name">
-    </div>
-    <button type="submit">Submit</button>
-  </form>
-
-  <div id="user-input">
-    <h2>Found Ducks:</h2>
-    <ul id="name-list"></ul>
   </div>
-</div>
+  {% include footer.html %}
+  {% include foot.html %}
 
-<script>
-  const form = document.getElementById('user-form');
-const userInput1 = document.getElementById('user-text1');
-const userInput2 = document.getElementById('user-text2');
-const nameList = document.getElementById('name-list');
 
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const inputValue1 = userInput1.value;
-  const inputValue2 = userInput2.value;
-  userInput1.value = '';
-  userInput2.value = '';
+  <script>
+    // Supabase configuration
+    const { createClient } = supabase;
+    const supabaseUrl = "{{ site.supabase_url }}";
+    const supabaseKey = "{{ site.supabase_key }}";
+    const _supabase = createClient(supabaseUrl, supabaseKey);
 
-  //const now = new Date();
-  //const currentDateAndTime = now.toString();
+    const form = document.getElementById('user-form');
+    const userInput1 = document.getElementById('user-text1');
+    const userInput2 = document.getElementById('user-text2');
+    const nameList = document.getElementById('name-list');
 
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Month index starts from 0, pad with 0 if single digit
-  const day = String(now.getDate()).padStart(2, '0'); // Pad with 0 if single digit
-  const hours = String(now.getHours()).padStart(2, '0'); // Pad with 0 if single digit
-  const minutes = String(now.getMinutes()).padStart(2, '0'); // Pad with 0 if single digit
-  const seconds = String(now.getSeconds()).padStart(2, '0'); // Pad with 0 if single digit
-  const milliseconds = String(now.getMilliseconds()).padStart(3, '0'); // Pad with zeros if necessary
-  
-  const currentDateAndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const duckName = userInput1.value;
+      const finderName = userInput2.value;
+      const now = new Date().toISOString();
 
-  appendToNameList(inputValue1, inputValue2, currentDateAndTime);
-  saveToDatabase(inputValue1, inputValue2, inputValue3);
-});
+      userInput1.value = '';
+      userInput2.value = '';
 
-function appendToNameList(name1, name2, name3) {
-  const newListItem = document.createElement('li');
-  newListItem.textContent = 'Duck- ' + name1 + ' is found by ' + name2 + ' on  ' + name3;
-  nameList.appendChild(newListItem);
-}
+      // Save to Supabase
+      const { data, error } = await _supabase
+        .from('ducks')
+        .insert([
+          { duck_name: duckName, finder_name: finderName, date_found: now }
+        ]);
 
-function saveToDatabase(name1, name2, name3) {
-  fs.readFile('./database/names.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    const names = JSON.parse(data);
-    names.push({ name1, name2, name3 });
-
-    fs.writeFile('./database/names.json', JSON.stringify(names), 'utf8', (err) => {
-      if (err) {
-        console.error(err);
+      if (error) {
+        console.error('Error adding document:', error);
+      } else {
+        appendToNameList(duckName, finderName, now);
       }
     });
-  });
-}
 
-function loadFromDatabase() {
-  fs.readFile('./database/names.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
+    function appendToNameList(duckName, finderName, dateFound) {
+      const newListItem = document.createElement('li');
+      newListItem.textContent = `Duck ${duckName} was found by ${finderName} on ${dateFound}`;
+      nameList.appendChild(newListItem);
     }
 
-    const names = JSON.parse(data);
-    names.forEach(({ name1, name2, name3 }) => {
-      appendToNameList(name1, name2, name3);
-    });
-  });
-}
+    async function loadFromDatabase() {
+      const { data, error } = await _supabase
+        .from('ducks')
+        .select('*');
 
-// When the database is set up, replace the /database/names.jason file with the correct jason, and uncomment the line below.
-//loadFromDatabase();
+      if (error) {
+        console.error('Error fetching documents:', error);
+      } else {
+        data.forEach(({ duck_name, finder_name, date_found }) => {
+          appendToNameList(duck_name, finder_name, date_found);
+        });
+      }
+    }
 
+    // Load existing data from the database on page load
+    loadFromDatabase();
+  </script>
   
-</script>
-
-<style>
-  /* CSS styles for positioning and styling the form elements */
-  .container {
-    text-align: center;
-  }
-
-  .input-container {
-    display: flex;
-    justify-content: center;
-  }
-
-  .input-container input {
-    margin-right: 10px;
-    padding: 5px;
-  }
-
-  button {
-    margin-top: 10px;
-    padding: 5px 10px;
-  }
-</style>
-
-    {% include footer.html %}
-
-    {% include foot.html %}
-  </body>
-  
+</body>
 </html>

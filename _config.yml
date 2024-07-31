@@ -9,6 +9,7 @@ url: "https://frdedynamics.github.io" # the base hostname & protocol for the sit
 og_image: /assets/img/profile-pic.jpg
 google_analytics: "UA-121636368-3"
 
+
 header:
   pages:
     - name: Home
@@ -44,6 +45,7 @@ sass:
     style: :compressed
 plugins:
   - jekyll-feed
+
 
 # Excluded items
 exclude:
