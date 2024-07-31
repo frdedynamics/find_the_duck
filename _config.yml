@@ -38,14 +38,8 @@ footer:
       name: RSS
       link: /feed.xml
 
-<%
-  # Load environment variables from GitHub Secrets if available
-  ENV['SUPABASE_URL'] ||= 'default_supabase_url' # Provide a default if not set
-  ENV['SUPABASE_KEY'] ||= 'default_supabase_key' # Provide a default if not set
-%>
-
-supabase_url: "<%= ENV['SUPABASE_URL'] %>"
-supabase_key: "<%= ENV['SUPABASE_KEY'] %>"
+supabase_url: "$SUPABASE_URL"
+supabase_key: "$SUPABASE_KEY"
 
 # Build settings
 markdown: kramdown
