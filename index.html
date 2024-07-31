@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+
+  
+
+  
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+  <!-- Primary Meta Tags -->
+  <title>Find The Duck</title>
+  <meta name="title" content="Find The Duck"/>
+  <meta name="description" content="Bay is a minimal Jekyll Theme."/>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:site_name" content="Find The Duck"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://frdedynamics.github.io/find_the_duck/"/>
+  <meta property="og:title" content="Find The Duck"/>
+  <meta property="og:description" content="Bay is a minimal Jekyll Theme."/>
+  <meta property="og:image" content="https://frdedynamics.github.io/find_the_duck/assets/img/profile-pic.jpg"/>
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image"/>
+  <meta property="twitter:url" content="https://frdedynamics.github.io/find_the_duck/"/>
+  <meta property="twitter:title" content="Find The Duck"/>
+  <meta property="twitter:description" content="Bay is a minimal Jekyll Theme."/>
+  <meta property="twitter:image" content="https://frdedynamics.github.io/find_the_duck/assets/img/profile-pic.jpg"/>
+  
+
+  <link rel="stylesheet" href="https://frdedynamics.github.io/find_the_duck/assets/css/main.css"/>
+  <link rel="canonical" href="https://frdedynamics.github.io/find_the_duck/"/>
+  <link rel="shortcut icon" href="https://frdedynamics.github.io/find_the_duck/duck.ico" type="image/x-icon"/>
+
+  <!-- Google Analytics -->
+  <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', "UA-121636368-3", "auto");
+    ga('send', "pageview");
+  </script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+</head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      background-color: #f7fafc;
+      color: #2d3748;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .page-content {
+      flex: 1;
+      padding: 20px;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .home {
+      text-align: center;
+    }
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 10%;
+      margin-bottom: 20px;
+    }
+    form {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background-color: #4299e1;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #3182ce;
+    }
+    #user-input {
+      margin-top: 40px;
+      width: 100%;
+      max-width: 600px;
+    }
+    #name-list {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="https://frdedynamics.github.io/find_the_duck/">
+      <img src="https://frdedynamics.github.io/find_the_duck/assets/img/title.png" alt="Find The Duck" />
+    </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon"></a>
+
+      <div class="menu">
+        
+          
+          
+          <a class="page-link" href="https://frdedynamics.github.io/find_the_duck/">
+            Home
+          </a>
+        
+          
+          
+          <a class="page-link" href="https://frdedynamics.github.io/find_the_duck/blog">
+            Blog
+          </a>
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+  
+  <div class="page-content">
+    <div class="wrapper">
+      <div class="home">
+        <img
+          src="https://frdedynamics.github.io/find_the_duck/assets/img/profile-pic.jpg"
+          alt="website picture"
+          class="profile-pic"
+        />
+        <p>
+  🐤 A social game. Have you found the duck? Write your name and hide it again for the next person!
+</p>
+
+
+      </div>
+
+      <div class="container">
+        <form id="user-form">
+          <div class="input-container">
+            <input type="text" id="user-text1" placeholder="Duck no">
+            <input type="text" id="user-text2" placeholder="Enter your name">
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      <div id="user-input">
+        <h2>Found Ducks:</h2>
+        <ul id="name-list"></ul>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <h4>CONTACT</h4>
+
+        <div class="social-links">
+          
+            <div class="social-link contact-links">
+
+              
+              <img
+                src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/email.png"
+                alt="email"
+              />
+
+              
+                
+                  
+                  
+                  
+                  
+                  
+
+                  
+                  
+                  
+                  <span
+                    data-resu="seta.mezig"
+                    data-eman-niamod="lvh"
+                    data-dlt-niamod="on"
+                    id="email-link"
+                    class="link email-link-cloaked"
+                  >
+                    Email
+                  </span>
+                
+              
+            </div>
+
+          
+        </div>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        
+          <h4>FOLLOW</h4>
+
+          <div class="social-links follow-links">
+            
+              <div class="social-link">
+
+                
+                <img
+                  src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/instagram.png"
+                  alt="instagram"
+                />
+                <a href="https://www.instagram.com/hvlrobotics/">
+                  
+                    Instagram
+                  
+                </a>
+              </div>
+
+            
+              <div class="social-link">
+
+                
+                <img
+                  src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/youtube.png"
+                  alt="youtube"
+                />
+                <a href="https://www.youtube.com/channel/UCL522yQ45L9ilPHQG5TQXBg">
+                  
+                    Youtube
+                  
+                </a>
+              </div>
+
+            
+              <div class="social-link">
+
+                
+                <img
+                  src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/linkedin.png"
+                  alt="linkedin"
+                />
+                <a href="https://www.linkedin.com/company/81467872/admin/dashboard/">
+                  
+                    LinkedIn
+                  
+                </a>
+              </div>
+
+            
+              <div class="social-link">
+
+                
+                <img
+                  src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/github.png"
+                  alt="github"
+                />
+                <a href="https://github.com/frdedynamics">
+                  
+                    GitHub
+                  
+                </a>
+              </div>
+
+            
+              <div class="social-link">
+
+                
+                <img
+                  src="https://frdedynamics.github.io/find_the_duck/assets/img/icons/rss.png"
+                  alt="rss"
+                />
+                <a href="/feed.xml">
+                  
+                    RSS
+                  
+                </a>
+              </div>
+
+            
+          </div>
+        
+      </div>
+
+      
+        <div class="footer-col footer-col-3 powered-by">
+          <p>
+            powered by <a href="https://github.com/eliottvincent/bay">Bay</a> | <span id="year"></span>
+          </p>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+
+  
+
+
+
+
+
+  <script type="text/javascript" src="https://frdedynamics.github.io/find_the_duck/assets/js/vendor/cash-4.1.5.min.js"></script>
+<script type="text/javascript" src="https://frdedynamics.github.io/find_the_duck/assets/js/site.js"></script>
+
+
+
+  <script>
+    // Supabase configuration
+    const { createClient } = supabase;
+    const supabaseUrl = "$SUPABASE_URL";
+    const supabaseKey = "$SUPABASE_KEY";
+    const _supabase = createClient(supabaseUrl, supabaseKey);
+
+
+    const form = document.getElementById('user-form');
+    const userInput1 = document.getElementById('user-text1');
+    const userInput2 = document.getElementById('user-text2');
+    const nameList = document.getElementById('name-list');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const duckName = userInput1.value;
+      const finderName = userInput2.value;
+      const now = new Date().toISOString();
+
+      userInput1.value = '';
+      userInput2.value = '';
+
+      // Save to Supabase
+      const { data, error } = await _supabase
+        .from('ducks')
+        .insert([
+          { duck_name: duckName, finder_name: finderName, date_found: now }
+        ]);
+
+      if (error) {
+        console.error('Error adding document:', error);
+      } else {
+        appendToNameList(duckName, finderName, now);
+      }
+    });
+
+    function appendToNameList(duckName, finderName, dateFound) {
+      const newListItem = document.createElement('li');
+      newListItem.textContent = `Duck ${duckName} was found by ${finderName} on ${dateFound}`;
+      nameList.appendChild(newListItem);
+    }
+
+    async function loadFromDatabase() {
+      const { data, error } = await _supabase
+        .from('ducks')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching documents:', error);
+      } else {
+        data.forEach(({ duck_name, finder_name, date_found }) => {
+          appendToNameList(duck_name, finder_name, date_found);
+        });
+      }
+    }
+
+    // Load existing data from the database on page load
+    loadFromDatabase();
+  </script>
+  
+</body>
+</html>
