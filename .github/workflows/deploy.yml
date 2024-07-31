@@ -3,7 +3,7 @@ name: Deploy Jekyll site to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - master  # Change this to your default branch
   workflow_dispatch:  # Add this line to allow manual triggers
 
 jobs:
