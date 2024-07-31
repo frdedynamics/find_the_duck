@@ -24,14 +24,18 @@ jobs:
         gem install bundler -v 2.4.22
         bundle install
 
-    - name: Build Jekyll site
+    - name: Add environment variables to Jekyll config
+      run: |
+        echo "supabase_url: $SUPABASE_URL" >> _config_prod.yml
+        echo "supabase_key: $SUPABASE_KEY" >> _config_prod.yml
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
-      run: |
-        echo "supabase_url: $SUPABASE_URL" >> _config.yml
-        echo "supabase_anon_key: $SUPABASE_KEY" >> _config.yml
-        JEKYLL_ENV=production bundle exec jekyll build --trace
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }} 
+
+    - name: Build site
+      env:
+        JEKYLL_ENV: production
+      run: bundle exec jekyll build --config _config.yml,_config_prod.yml
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
