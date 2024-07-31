@@ -25,13 +25,13 @@ jobs:
         bundle install
 
     - name: Build Jekyll site
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-          echo "supabase_url: $SUPABASE_URL" >> _config.yml
-          echo "supabase_anon_key: $SUPABASE_KEY" >> _config.yml
-          JEKYLL_ENV=production bundle exec jekyll build
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: |
+        echo "supabase_url: $SUPABASE_URL" >> _config.yml
+        echo "supabase_anon_key: $SUPABASE_KEY" >> _config.yml
+        JEKYLL_ENV=production bundle exec jekyll build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
