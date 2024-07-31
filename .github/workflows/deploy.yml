@@ -7,7 +7,7 @@ on:
   workflow_dispatch:  # Add this line to allow manual triggers
 
 jobs:
-  build:
+  github-pages:
     runs-on: ubuntu-latest
 
     steps:
