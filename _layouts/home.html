@@ -19,6 +19,7 @@
     .page-content {
       flex: 1;
       padding: 20px;
+      font-size: large;
     }
     .wrapper {
       display: flex;
@@ -53,28 +54,37 @@
       border: 1px solid #cbd5e0;
       border-radius: 4px;
       box-sizing: border-box;
+      font-size: large;
+    }
+    input[type="text"]:required:invalid {
+      border-color: #e53e3e;
     }
     button {
       width: 100%;
-      background-color: #4299e1;
-      color: white;
+      background-color: #f6ee00;
+      color: #252525;
       padding: 10px;
-      border: none;
       border-radius: 4px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 700;
     }
     button:hover {
-      background-color: #3182ce;
+      background-color: #b1a231;
     }
     #user-input {
       margin-top: 40px;
       width: 100%;
       max-width: 600px;
     }
-    #name-list {
-      list-style-type: disc;
-      padding-left: 20px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #cbd5e0;
     }
   </style>
 </head>
@@ -100,7 +110,7 @@
               <option value="Duck 3">Duck 3</option>
               <option value="Duck 4">Duck 4</option>
             </select>
-            <input type="text" id="user-text" placeholder="Enter your name">
+            <input type="text" id="user-text" placeholder="Enter your name" required>
           </div>
           <button type="submit">Submit</button>
         </form>
@@ -108,7 +118,16 @@
 
       <div id="user-input">
         <h2>Found Ducks:</h2>
-        <ul id="name-list"></ul>
+        <table>
+          <thead>
+            <tr>
+              <th>Duck Name</th>
+              <th>Finder Name</th>
+              <th>Date Found</th>
+            </tr>
+          </thead>
+          <tbody id="name-list"></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -149,10 +168,19 @@
       }
     });
 
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
     function appendToNameList(duckName, finderName, dateFound) {
-      const newListItem = document.createElement('li');
-      newListItem.textContent = `${duckName} was found by ${finderName} on ${dateFound}`;
-      nameList.appendChild(newListItem);
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${duckName}</td>
+        <td>${finderName}</td>
+        <td>${formatDate(dateFound)}</td>
+      `;
+      nameList.appendChild(newRow);
     }
 
     async function loadFromDatabase() {
