@@ -47,7 +47,7 @@
       gap: 10px;
       margin-bottom: 20px;
     }
-    input[type="text"] {
+    select, input[type="text"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #cbd5e0;
@@ -94,8 +94,13 @@
       <div class="container">
         <form id="user-form">
           <div class="input-container">
-            <input type="text" id="user-text1" placeholder="Duck no">
-            <input type="text" id="user-text2" placeholder="Enter your name">
+            <select id="duck-select">
+              <option value="Duck 1">Duck 1</option>
+              <option value="Duck 2">Duck 2</option>
+              <option value="Duck 3">Duck 3</option>
+              <option value="Duck 4">Duck 4</option>
+            </select>
+            <input type="text" id="user-text" placeholder="Enter your name">
           </div>
           <button type="submit">Submit</button>
         </form>
@@ -110,7 +115,6 @@
   {% include footer.html %}
   {% include foot.html %}
 
-
   <script>
     // Supabase configuration
     const { createClient } = supabase;
@@ -119,18 +123,17 @@
     const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const form = document.getElementById('user-form');
-    const userInput1 = document.getElementById('user-text1');
-    const userInput2 = document.getElementById('user-text2');
+    const duckSelect = document.getElementById('duck-select');
+    const userInput = document.getElementById('user-text');
     const nameList = document.getElementById('name-list');
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const duckName = userInput1.value;
-      const finderName = userInput2.value;
+      const duckName = duckSelect.value;
+      const finderName = userInput.value;
       const now = new Date().toISOString();
 
-      userInput1.value = '';
-      userInput2.value = '';
+      userInput.value = '';
 
       // Save to Supabase
       const { data, error } = await _supabase
@@ -148,7 +151,7 @@
 
     function appendToNameList(duckName, finderName, dateFound) {
       const newListItem = document.createElement('li');
-      newListItem.textContent = `Duck ${duckName} was found by ${finderName} on ${dateFound}`;
+      newListItem.textContent = `${duckName} was found by ${finderName} on ${dateFound}`;
       nameList.appendChild(newListItem);
     }
 
