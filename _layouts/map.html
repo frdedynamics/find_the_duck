@@ -1,0 +1,87 @@
+---
+layout: default
+title: Duck Finder Map
+permalink: /map/
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck Finder Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <style>
+    body {
+      background-color: #f7fafc;
+      color: #2d3748;
+      font-family: Arial, sans-serif;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    .page-content{
+      font-size: larger;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-content">
+  {{content}}
+  <div id="map"></div>
+</divdiv>
+  <script>
+    // Supabase configuration
+    const { createClient } = supabase;
+    const SUPABASE_URL = "{{ site.supabase_url }}";
+    const SUPABASE_KEY = "{{ site.supabase_key }}";
+    const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let map;
+    let markers = [];
+
+    function initializeMap() {
+      map = L.map('map').setView([0, 0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+    }
+
+    function addMarkerToMap(lat, lon, popupText) {
+      const marker = L.marker([lat, lon]).addTo(map);
+      marker.bindPopup(popupText);
+      markers.push(marker);
+      map.setView([lat, lon], 12);
+    }
+
+    async function loadFromDatabase() {
+      const { data, error } = await _supabase
+        .from('ducks')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching documents:', error);
+      } else {
+        data.forEach(({ duck_name, finder_name, date_found, latitude, longitude }) => {
+          if (latitude && longitude) {
+            addMarkerToMap(latitude, longitude, `Duck ${duck_name} found by ${finder_name}`);
+          }
+        });
+      }
+    }
+
+    // Initialize the map and load existing data from the database on page load
+    initializeMap();
+    loadFromDatabase();
+  </script>
+</body>
+</html>

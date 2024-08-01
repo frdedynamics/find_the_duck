@@ -6,11 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Duck Finder</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <style>
     body {
       background-color: #f7fafc;
       color: #2d3748;
       font-family: Arial, sans-serif;
+      font-weight: 700;
       margin: 0;
       display: flex;
       flex-direction: column;
@@ -77,14 +80,45 @@
       width: 100%;
       max-width: 600px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
     }
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #cbd5e0;
+    .card {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      cursor: pointer;
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.2em;
+    }
+    .card p {
+      margin: 5px 0;
+    }
+    .map-container {
+      display: none;
+      height: 200px;
+      margin-top: 10px;
+    }
+    #location-btn {
+      margin-top: 10px;
+      background-color: #4299e1;
+      color: white;
+    }
+    #location-btn:hover {
+      background-color: #3182ce;
+    }
+    #location-display {
+      margin-top: 10px;
+      font-size: large;
     }
   </style>
 </head>
@@ -108,9 +142,10 @@
               <option value="Duck 1">Duck 1</option>
               <option value="Duck 2">Duck 2</option>
               <option value="Duck 3">Duck 3</option>
-              <option value="Duck 4">Duck 4</option>
             </select>
             <input type="text" id="user-text" placeholder="Enter your name" required>
+            <button type="button" id="location-btn">Add Location</button>
+            <div id="location-display"></div>
           </div>
           <button type="submit">Submit</button>
         </form>
@@ -118,16 +153,7 @@
 
       <div id="user-input">
         <h2>Found Ducks:</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Duck Name</th>
-              <th>Finder Name</th>
-              <th>Date Found</th>
-            </tr>
-          </thead>
-          <tbody id="name-list"></tbody>
-        </table>
+        <div class="cards-container" id="cards-container"></div>
       </div>
     </div>
   </div>
@@ -140,66 +166,134 @@
     const SUPABASE_URL = "{{ site.supabase_url }}";
     const SUPABASE_KEY = "{{ site.supabase_key }}";
     const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+  
     const form = document.getElementById('user-form');
     const duckSelect = document.getElementById('duck-select');
     const userInput = document.getElementById('user-text');
-    const nameList = document.getElementById('name-list');
-
+    const locationBtn = document.getElementById('location-btn');
+    const locationDisplay = document.getElementById('location-display');
+    const cardsContainer = document.getElementById('cards-container');
+  
+    let userLocation = { latitude: null, longitude: null };
+  
+    async function reverseGeocode(lat, lon) {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data && data.address) {
+        return `${data.address.city || data.address.town || data.address.village || data.address.hamlet}, ${data.address.country}`;
+      } else {
+        return 'Location not found';
+      }
+    }
+  
+    locationBtn.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async position => {
+          userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          const address = await reverseGeocode(userLocation.latitude, userLocation.longitude);
+          locationDisplay.textContent = `Location: ${address}`;
+        }, error => {
+          console.error('Error getting location:', error);
+          alert('Error getting location. Please allow location access.');
+        });
+      } else {
+        alert('Geolocation is not supported by this browser.');
+      }
+    });
+  
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const duckName = duckSelect.value;
       const finderName = userInput.value;
       const now = new Date().toISOString();
-
+  
       userInput.value = '';
-
+  
       // Save to Supabase
       const { data, error } = await _supabase
         .from('ducks')
         .insert([
-          { duck_name: duckName, finder_name: finderName, date_found: now }
+          { 
+            duck_name: duckName, 
+            finder_name: finderName, 
+            date_found: now, 
+            latitude: userLocation.latitude, 
+            longitude: userLocation.longitude 
+          }
         ]);
-
+  
       if (error) {
         console.error('Error adding document:', error);
       } else {
-        appendToNameList(duckName, finderName, now);
+        const address = await reverseGeocode(userLocation.latitude, userLocation.longitude);
+        appendToCardsContainer(duckName, finderName, now, userLocation.latitude, userLocation.longitude, address);
       }
     });
-
+  
     function formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     }
-
-    function appendToNameList(duckName, finderName, dateFound) {
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-        <td>${duckName}</td>
-        <td>${finderName}</td>
-        <td>${formatDate(dateFound)}</td>
+  
+    function appendToCardsContainer(duckName, finderName, dateFound, lat, lon, address) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${duckName}</h3>
+        <p><strong>Finder:</strong> ${finderName}</p>
+        <p><strong>Date Found:</strong> ${formatDate(dateFound)}</p>
+        <p><strong>Location:</strong> ${address ? address : 'Location not registered'}</p>
+        <div class="map-container" id="map-${duckName.replace(/\s+/g, '-')}-${finderName.replace(/\s+/g, '-')}" style="${lat && lon ? '' : 'display: none;'}"></div>
       `;
-      nameList.appendChild(newRow);
-    }
 
+      if (lat && lon) {
+        let mapInstance;
+        card.addEventListener('click', () => {
+          const mapContainer = card.querySelector('.map-container');
+          if (mapContainer.style.display === 'none' || mapContainer.style.display === '') {
+            mapContainer.style.display = 'block';
+
+            if (mapInstance) {
+              mapInstance.remove(); // Remove existing map instance if any
+            }
+
+            mapInstance = L.map(mapContainer.id).setView([lat, lon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mapInstance);
+            L.marker([lat, lon]).addTo(mapInstance).bindPopup(`<b>${duckName}</b><br>${address}`).openPopup();
+          } else {
+            mapContainer.style.display = 'none';
+            if (mapInstance) {
+              mapInstance.remove(); // Remove map instance when hiding the map
+              mapInstance = null; // Clear the map instance
+            }
+          }
+        });
+      }
+
+      cardsContainer.appendChild(card);
+    }
+      
     async function loadFromDatabase() {
       const { data, error } = await _supabase
         .from('ducks')
         .select('*');
-
+  
       if (error) {
         console.error('Error fetching documents:', error);
       } else {
-        data.forEach(({ duck_name, finder_name, date_found }) => {
-          appendToNameList(duck_name, finder_name, date_found);
-        });
+        for (const { duck_name, finder_name, date_found, latitude, longitude } of data) {
+          const address = await reverseGeocode(latitude, longitude);
+          appendToCardsContainer(duck_name, finder_name, date_found, latitude, longitude, address);
+        }
       }
     }
-
+  
     // Load existing data from the database on page load
     loadFromDatabase();
   </script>
-  
-</body>
-</html>

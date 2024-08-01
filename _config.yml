@@ -13,7 +13,8 @@ header:
   pages:
     - name: Home
       slug: /
-    - name: Blog
+    - name: Map
+      slug: map
 
 footer:
   show_powered_by: true
