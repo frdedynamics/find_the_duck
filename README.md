@@ -4,5 +4,7 @@ This game is inspired by our summer students in 2024. The idea is to be social w
 
 ### How to play
 1. Scan the QR code
-2. Write your name and the date
-3. Hide the duck for the next person
+2. Write your name
+3. Add you location if you want to
+4. Submit
+5. Hide the duck for the next person
