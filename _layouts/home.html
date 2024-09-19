@@ -241,17 +241,39 @@
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     }
+
+    function escapeHTML(str){
+      return str.replace(/[&'"]/g, function(char){
+        const escapeChars = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        };
+        return escapeChars[char];
+      })
+    }
   
     function appendToCardsContainer(duckName, finderName, dateFound, lat, lon, address) {
       const card = document.createElement('div');
       card.className = 'card';
+
+      const escapedDuckName = escapeHTML(duckName);
+      const escapedFinderName = escapeHTML(finderName);
+      const escapedDateFound = escapeHTML(formatDate(dateFound));
+      const escapedAddress = escapeHTML(address ? address : 'Location not registered');
+      const mapContainerId = `map-${escapedDuckName.replace(/\s+/g, '-')}-${escapedFinderName.replace(/\s+/g, '-')}`;
+
       card.innerHTML = `
-        <h3>${duckName}</h3>
-        <p><strong>Finder:</strong> ${finderName}</p>
-        <p><strong>Date Found:</strong> ${formatDate(dateFound)}</p>
-        <p><strong>Location:</strong> ${address ? address : 'Location not registered'}</p>
-        <div class="map-container" id="map-${duckName.replace(/\s+/g, '-')}-${finderName.replace(/\s+/g, '-')}" style="${lat && lon ? '' : 'display: none;'}"></div>
+          <h3>${escapedDuckName}</h3>
+          <p><strong>Finder:</strong> ${escapedFinderName}</p>
+          <p><strong>Date Found:</strong> ${escapedDateFound}</p>
+          <p><strong>Location:</strong> ${escapedAddress}</p>
+          <div class="map-container" id="${mapContainerId}" style="${lat && lon ? '' : 'display: none;'}"></div>
       `;
+
+      document.getElementById('cardsContainer').appendChild(card);
 
       if (lat && lon) {
         let mapInstance;
