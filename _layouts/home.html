@@ -256,53 +256,53 @@
     }
   
     function appendToCardsContainer(duckName, finderName, dateFound, lat, lon, address) {
-      const card = document.createElement('div');
-      card.className = 'card';
+    const card = document.createElement('div');
+    card.className = 'card';
 
-      const escapedDuckName = escapeHTML(duckName);
-      const escapedFinderName = escapeHTML(finderName);
-      const escapedDateFound = escapeHTML(formatDate(dateFound));
-      const escapedAddress = escapeHTML(address ? address : 'Location not registered');
-      const mapContainerId = `map-${escapedDuckName.replace(/\s+/g, '-')}-${escapedFinderName.replace(/\s+/g, '-')}`;
+    const escapedDuckName = escapeHTML(duckName);
+    const escapedFinderName = escapeHTML(finderName);
+    const escapedDateFound = escapeHTML(formatDate(dateFound));
+    const escapedAddress = escapeHTML(address ? address : 'Location not registered');
+    const mapContainerId = `map-${escapedDuckName.replace(/\s+/g, '-')}-${escapedFinderName.replace(/\s+/g, '-')}`;
 
-      card.innerHTML = `
-          <h3>${escapedDuckName}</h3>
-          <p><strong>Finder:</strong> ${escapedFinderName}</p>
-          <p><strong>Date Found:</strong> ${escapedDateFound}</p>
-          <p><strong>Location:</strong> ${escapedAddress}</p>
-          <div class="map-container" id="${mapContainerId}" style="${lat && lon ? '' : 'display: none;'}"></div>
-      `;
+    card.innerHTML = `
+        <h3>${escapedDuckName}</h3>
+        <p><strong>Finder:</strong> ${escapedFinderName}</p>
+        <p><strong>Date Found:</strong> ${escapedDateFound}</p>
+        <p><strong>Location:</strong> ${escapedAddress}</p>
+        <div class="map-container" id="${mapContainerId}" style="${lat && lon ? '' : 'display: none;'}"></div>
+    `;
 
-      document.getElementById('cardsContainer').appendChild(card);
+    const cardsContainer = document.getElementById('cardsContainer');
+    cardsContainer.appendChild(card);
 
-      if (lat && lon) {
-        let mapInstance;
+    let mapInstance;
+    if (lat && lon) {
         card.addEventListener('click', () => {
-          const mapContainer = card.querySelector('.map-container');
-          if (mapContainer.style.display === 'none' || mapContainer.style.display === '') {
-            mapContainer.style.display = 'block';
+            const mapContainer = card.querySelector('.map-container');
+            if (mapContainer.style.display === 'none' || mapContainer.style.display === '') {
+                mapContainer.style.display = 'block';
 
-            if (mapInstance) {
-              mapInstance.remove(); // Remove existing map instance if any
-            }
+                if (mapInstance) {
+                    mapInstance.remove(); // Fjern eksisterande kartinstans dersom det finst
+                }
 
-            mapInstance = L.map(mapContainer.id).setView([lat, lon], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(mapInstance);
-            L.marker([lat, lon]).addTo(mapInstance).bindPopup(`<b>${duckName}</b><br>${address}`).openPopup();
-          } else {
-            mapContainer.style.display = 'none';
-            if (mapInstance) {
-              mapInstance.remove(); // Remove map instance when hiding the map
-              mapInstance = null; // Clear the map instance
+                mapInstance = L.map(mapContainer.id).setView([lat, lon], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(mapInstance);
+                L.marker([lat, lon]).addTo(mapInstance)
+                  .bindPopup(`<b>${escapedDuckName}</b><br>${escapedAddress}`).openPopup();
+            } else {
+                mapContainer.style.display = 'none';
+                if (mapInstance) {
+                    mapInstance.remove(); // Fjern kartinstansen når kartet vert skjult
+                    mapInstance = null; // Nullstill kartinstansen
+                }
             }
-          }
         });
-      }
-
-      cardsContainer.appendChild(card);
     }
+}
       
     async function loadFromDatabase() {
       const { data, error } = await _supabase
