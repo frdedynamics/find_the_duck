@@ -241,68 +241,64 @@
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     }
-
-    function escapeHTML(str){
-      return str.replace(/[&'"]/g, function(char){
-        const escapeChars = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;'
-        };
-        return escapeChars[char];
-      })
-    }
+  
   
     function appendToCardsContainer(duckName, finderName, dateFound, lat, lon, address) {
-    const card = document.createElement('div');
-    card.className = 'card';
+      const card = document.createElement('div');
+      card.className = 'card';
 
-    const escapedDuckName = escapeHTML(duckName);
-    const escapedFinderName = escapeHTML(finderName);
-    const escapedDateFound = escapeHTML(formatDate(dateFound));
-    const escapedAddress = escapeHTML(address ? address : 'Location not registered');
-    const mapContainerId = `map-${escapedDuckName.replace(/\s+/g, '-')}-${escapedFinderName.replace(/\s+/g, '-')}`;
+      const title = document.createElement('h3');
+      title.textContent = duckName;
 
-    card.innerHTML = `
-        <h3>${escapedDuckName}</h3>
-        <p><strong>Finder:</strong> ${escapedFinderName}</p>
-        <p><strong>Date Found:</strong> ${escapedDateFound}</p>
-        <p><strong>Location:</strong> ${escapedAddress}</p>
-        <div class="map-container" id="${mapContainerId}" style="${lat && lon ? '' : 'display: none;'}"></div>
-    `;
+      const finderPara = document.createElement('p');
+      finderPara.innerHTML = `<strong>Finder:</strong> ${finderName}`;
 
-    const cardsContainer = document.getElementById('cardsContainer');
-    cardsContainer.appendChild(card);
+      const datePara = document.createElement('p');
+      datePara.innerHTML = `<strong>Date Found:</strong> ${formatDate(dateFound)}`;
 
-    let mapInstance;
-    if (lat && lon) {
-        card.addEventListener('click', () => {
-            const mapContainer = card.querySelector('.map-container');
-            if (mapContainer.style.display === 'none' || mapContainer.style.display === '') {
-                mapContainer.style.display = 'block';
+      const locationPara = document.createElement('p');
+      locationPara.innerHTML = `<strong>Location:</strong> ${address ? address : 'Location not registered'}`;
 
-                if (mapInstance) {
-                    mapInstance.remove(); // Fjern eksisterande kartinstans dersom det finst
-                }
+      const mapContainer = document.createElement('div');
+      mapContainer.className = 'map-container';
+      mapContainer.id = `map-${duckName.replace(/\s+/g, '-')}-${finderName.replace(/\s+/g, '-')}`;
+      if (!(lat && lon)) {
+          mapContainer.style.display = 'none';
+      }
+      card.appendChild(title);
+      card.appendChild(finderPara);
+      card.appendChild(datePara);
+      card.appendChild(locationPara);
+      card.appendChild(mapContainer);
 
-                mapInstance = L.map(mapContainer.id).setView([lat, lon], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(mapInstance);
-                L.marker([lat, lon]).addTo(mapInstance)
-                  .bindPopup(`<b>${escapedDuckName}</b><br>${escapedAddress}`).openPopup();
-            } else {
-                mapContainer.style.display = 'none';
-                if (mapInstance) {
-                    mapInstance.remove(); // Fjern kartinstansen når kartet vert skjult
-                    mapInstance = null; // Nullstill kartinstansen
-                }
-            }
-        });
+      let mapInstance;
+      if (lat && lon) {
+          card.addEventListener('click', () => {
+              const mapContainer = card.querySelector('.map-container');
+              if (mapContainer.style.display === 'none' || mapContainer.style.display === '') {
+                  mapContainer.style.display = 'block';
+
+                  if (mapInstance) {
+                      mapInstance.remove(); // Fjern eksisterande kartinstans dersom det finst
+                  }
+
+                  mapInstance = L.map(mapContainer.id).setView([lat, lon], 13);
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  }).addTo(mapInstance);
+                  L.marker([lat, lon]).addTo(mapInstance)
+                    .bindPopup(`<b>${escapedDuckName}</b><br>${escapedAddress}`).openPopup();
+              } else {
+                  mapContainer.style.display = 'none';
+                  if (mapInstance) {
+                      mapInstance.remove(); // Fjern kartinstansen når kartet vert skjult
+                      mapInstance = null; // Nullstill kartinstansen
+                  }
+              }
+          });
+      }
+      cardsContainer.appendChild(card)
     }
-}
       
     async function loadFromDatabase() {
       const { data, error } = await _supabase
@@ -318,7 +314,6 @@
         }
       }
     }
-  
     // Load existing data from the database on page load
     loadFromDatabase();
   </script>
