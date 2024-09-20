@@ -251,7 +251,9 @@
       title.textContent = duckName;
 
       const finderPara = document.createElement('p');
-      finderPara.innerHTML = `<strong>Finder:</strong> ${finderName}`;
+      finderPara.innerHTML = '<strong>Finder:</strong> ';
+      const finderText = document.createTextNode(finderName);
+      finderPara.appendChild(finderText);
 
       const datePara = document.createElement('p');
       datePara.innerHTML = `<strong>Date Found:</strong> ${formatDate(dateFound)}`;
