@@ -40,8 +40,8 @@ footer:
       link: /feed.xml
 
 
-supabase_url: "https://rrqmslvzplsjszldsnxi.supabase.co"
-supabase_key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJycW1zbHZ6cGxzanN6bGRzbnhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIzNjk5MjIsImV4cCI6MjAzNzk0NTkyMn0.W7HIBZU9IeNUO3Bl2zdltu7Rll7-6uab3h5x0u4QmxQ"
+supabase_url: "${{ secrets.ENV_SECRET_SUPABASE_URL }}"
+supabase_key: "${{ secrets.ENV_SECRET_SUPABASE_KEY }}"
 
 # Build settings
 markdown: kramdown
