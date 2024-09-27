@@ -39,10 +39,6 @@ footer:
       name: RSS
       link: /feed.xml
 
-
-supabase_url: ${ENV_SECRET_SUPABASE_URL}
-supabase_key: ${ENV_SECRET_SUPABASE_KEY}
-
 # Build settings
 markdown: kramdown
 sass:
