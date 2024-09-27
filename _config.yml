@@ -40,8 +40,8 @@ footer:
       link: /feed.xml
 
 
-supabase_url: ${{secrets.ENV_SECRET_SUPABASE_URL}}
-supabase_key: ${{secrets.ENV_SECRET_SUPABASE_KEY}}
+supabase_url: ${{env.ENV_SECRET_SUPABASE_URL}}
+supabase_key: ${{env.ENV_SECRET_SUPABASE_KEY}}
 
 # Build settings
 markdown: kramdown
