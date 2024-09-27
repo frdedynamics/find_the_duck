@@ -31,13 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add environment variables to Jekyll config (evaluate envs first, then quotes)
-        env: 
-          ENV_SECRET_SUPABASE_URL: ${{ secrets.ENV_SECRET_SUPABASE_URL }}
-          ENV_SECRET_SUPABASE_KEY: ${{ secrets.ENV_SECRET_SUPABASE_KEY }}
+      - name: Add environment variables to Jekyll config
         run: |
-          echo "supabase_url: "$ENV_SECRET_SUPABASE_URL" >> _config.yml
-          echo "supabase_key: $ENV_SECRET_SUPABASE_KEY" >> _config.yml
+          echo "supabase_url: $SUPABASE_URL" >> _config.yml
+          echo "supabase_key: $SUPABASE_KEY" >> _config.yml
+        env:
+          SUPABASE_URL: ${{ secrets.ENV_SECRET_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.ENV_SECRET_SUPABASE_KEY }} 
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
