@@ -6,7 +6,7 @@ source "https://rubygems.org"
 #     bundle exec jekyll serve
 
 
-gem "jekyll", "~> 4.0.0"
+gem "jekyll", "~> 4.3.4"
 gem 'webrick', '~> 1.8'
 gem 'jekyll-environment-variables'
 gem 'jekyll-dotenv', '~> 0.1.0'
