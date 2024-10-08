@@ -1,11 +1,6 @@
 {
   "name": "Jekyll Website Dev Container",
-  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
-  "features": {
-    "docker-in-docker": "latest",
-    "git": "latest"
-  },
-  "postCreateCommand": "sudo gem install bundler && sudo /usr/local/bin/bundle install && bundle exec jekyll serve --watch",
+  "image": "mcr.microsoft.com/devcontainers/jekyll",
   "customizations": {
     "vscode": {
       "settings": {
@@ -16,6 +11,5 @@
         "davidanson.vscode-markdownlint"
       ]
     }
-  },
-  "remoteUser": "vscode"
+  }
 }
