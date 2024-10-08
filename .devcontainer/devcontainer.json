@@ -1,21 +1,21 @@
 {
-    "name": "Jekyll Website Dev Container",
-    "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
-    "features": {
-      "docker-in-docker": "latest",
-      "git": "latest"
-    },
-    "postCreateCommand": "bundle install && bundle exec jekyll serve --watch",
-    "customizations": {
-      "vscode": {
-        "settings": {
-          "editor.tabSize": 2
-        },
-        "extensions": [
-          "rebornix.Ruby",
-          "davidanson.vscode-markdownlint"
-        ]
-      }
-    },
-    "remoteUser": "vscode"
-  }
+  "name": "Jekyll Website Dev Container",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu",
+  "features": {
+    "docker-in-docker": "latest",
+    "git": "latest"
+  },
+  "postCreateCommand": "sudo gem install bundler && sudo /usr/local/bin/bundle install && bundle exec jekyll serve --watch",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.tabSize": 2
+      },
+      "extensions": [
+        "rebornix.Ruby",
+        "davidanson.vscode-markdownlint"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}

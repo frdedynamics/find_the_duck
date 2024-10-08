@@ -5,9 +5,11 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     build-essential \
     ruby-full \
-    && rm -rf /var/lib/apt/lists/* \
-    && gem install bundler jekyll
+    && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user to work in container
-RUN useradd -m devuser
+# Install bundler and Jekyll locally for devuser
 USER devuser
+RUN gem install --user-install bundler jekyll
+
+# Add Ruby and Bundler to PATH
+ENV PATH="/home/devuser/.gem/ruby/3.0.0/bin:$PATH"
