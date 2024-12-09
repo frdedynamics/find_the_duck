@@ -7,7 +7,7 @@ source "https://rubygems.org"
 
 
 gem "jekyll", "~> 4.0.0"
-gem 'webrick', '~> 1.8'
+gem 'webrick', '~> 1.9'
 gem 'jekyll-environment-variables'
 gem 'jekyll-dotenv', '~> 0.1.0'
 
